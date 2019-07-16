@@ -1,0 +1,67 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+#
+# Setup variables using grains['os_family'] based logic.
+# You just need to add the key:values for an `os_family` that differ
+# from `defaults.yaml`.
+# Only add an `os_family` which is/will be supported by the formula
+#
+# If you do not need to provide defaults via the `os_family` grain,
+# you will need to provide at least an empty dict in this file, e.g.
+# osfamilymap: {}
+---
+{%- if grains.os == 'MacOS' %}
+{%-   set macos_rootgroup = salt['cmd.run']("stat -f '%Sg' /dev/console") %}
+{%- endif %}
+
+Debian:
+  pkg:
+    name: elasticsearch
+    os: name
+    baseurl: deb https://artifacts.elastic.co/packages/
+    type: apt
+    repo:
+      humanname: elastic_official
+      file: /etc/apt/sources.list.d/elastic.list
+      key_url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+  config: /etc/elasticsearch.d/custom.conf
+
+RedHat:
+  pkg:
+    name: elasticsearch
+    os: baseurl
+    baseurl: https://artifacts.elastic.co/packages/
+    type: yum
+    repo:
+      repo_gpgcheck: 1
+      gpgkey: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+      sslverify: 1
+      sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+  config: /etc/elasticsearch.conf
+
+Suse:
+  pkg:
+    name: elasticsearch-suse
+
+Gentoo: {}
+
+Arch:
+  pkg:
+    name: elasticsearch-arch
+  service:
+    name: service-arch
+
+Alpine: {}
+
+FreeBSD:
+  rootgroup: wheel
+
+OpenBSD:
+  rootgroup: wheel
+
+Solaris: {}
+
+Windows: {}
+
+MacOS:
+  rootgroup: {{ macos_rootgroup | d('') }}

@@ -1,0 +1,22 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+---
+elasticsearch:
+  pkg:
+    name: elasticsearch
+    use_upstream_repo: True
+    use_oss_pkg: False
+    oss_url: 'oss-'
+    repo:
+      humanname: elasticsearch
+      name: elasticsearch
+      enabled: 1
+      gpgcheck: 1
+  rootgroup: root
+  version: 7.x
+  config: '/etc/elasticsearch'
+  service:
+    name: elasticsearch
+  # Just here for testing
+  added_in_defaults: defaults_value
+  winner: defaults
