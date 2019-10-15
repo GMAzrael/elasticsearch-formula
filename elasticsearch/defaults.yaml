@@ -8,8 +8,6 @@ elasticsearch:
     use_oss_pkg: False
     oss_url: 'oss-'
     repo:
-      humanname: elasticsearch
-      name: elasticsearch
       enabled: 1
       gpgcheck: 1
   rootgroup: root
